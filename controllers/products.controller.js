@@ -50,12 +50,16 @@ export async function updateProduct(req, res, next) {
             [productname],
             [id]
         );
+        res.status(200).send("successfully deleted");
     } catch (error) {
         next(error);
     }
 }
 export async function deleteProduct(req, res, next) {
     try {
+        const id = +req.params.id;
+        await pool.query(`delete from products where id=$1`, [id]);
+        res.status(200).send("successfully deleted");
     } catch (error) {
         next(error);
     }
