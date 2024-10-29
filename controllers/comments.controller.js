@@ -28,7 +28,7 @@ export async function showComments(req, res, next) {
     try {
         const id = fs.readFileSync(filePath, "utf-8");
         const data = await pool.query(
-            `SELECT rate,comment FROM comments WHERE user_id = $1`,
+            `SELECT p.productname,p.price,c.rate,c.comment FROM comments as c JOIN products as p ON c.product_id=p.id WHERE c.user_id=$1`,
             [id]
         );
         res.status(200).send(data.rows);
