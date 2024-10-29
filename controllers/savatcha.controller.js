@@ -12,6 +12,9 @@ export async function getAllFromSavatcha(req, res, next) {
             WHERE s.user_id = $1;`,
             [id]
         );
+        if (data.rows.length === 0) {
+            return res.status(404).send("Not Found or Problem with data");
+        }
         res.status(200).send(data.rows);
     } catch (error) {
         next(error);
@@ -19,6 +22,13 @@ export async function getAllFromSavatcha(req, res, next) {
 }
 export async function deleteFromSavatcha(req, res, next) {
     try {
+        const id = fs.readFileSync(filePath, "utf-8");
+        await pool.query(
+            `DELETE FROM savatcha
+            WHERE user_id = $1;`,
+            [id]
+        );
+        res.status.send("You completly removed product from savatcha");
     } catch (error) {
         next(error);
     }

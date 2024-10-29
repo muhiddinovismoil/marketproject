@@ -17,7 +17,6 @@ export async function createMarket(req, res, next) {
 export async function getAllMarkets(req, res, next) {
     try {
         const data = await pool.query("SELECT * FROM market");
-        console.log(data.rows);
         res.status(200).send(data.rows);
     } catch (error) {
         next(error);
