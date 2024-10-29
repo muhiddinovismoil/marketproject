@@ -1,5 +1,7 @@
 import pool from "../database/db.js";
-
+import fs from "fs";
+import path from "path";
+let filePath = path.join(process.cwd(), "controllers", "user.txt");
 export async function register(req, res, next) {
     try {
         const { name, username, email, password } = req.body;
@@ -17,6 +19,7 @@ export async function register(req, res, next) {
             `INSERT INTO users(name,username,email,password,market_id)`,
             [name, username, email, password]
         );
+        fs.writeFileSync(filePath, J);
         res.status(200).send("You are registered successfully");
     } catch (error) {
         next(error);
@@ -24,7 +27,19 @@ export async function register(req, res, next) {
 }
 export async function login(req, res, next) {
     try {
-        res.status(200).send("successfully logged in");
+        const { email, password } = req.body;
+        const tb = await pool.query(`SELECT * FROM users`);
+        for (let i = 0; i < tb.rows.length; i++) {
+            if (
+                tb.rows[i].email === email &&
+                tb.rows[i].password === password
+            ) {
+                let id = tb.rows[i].id;
+                fs.writeFileSync(filePath, JSON.stringify(id));
+                return res.status(200).send("Login was successful");
+            }
+        }
+        res.status(404).send("ERROR");
     } catch (error) {
         next(error);
     }

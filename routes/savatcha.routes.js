@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { getAllFromSavatcha } from "../controllers";
+import {
+    getAllFromSavatcha,
+    deleteFromSavatcha,
+} from "../controllers/index.js";
 export const savatchaRouter = Router();
 savatchaRouter.get("/all", getAllFromSavatcha);
 savatchaRouter.delete("/:id", deleteFromSavatcha);
